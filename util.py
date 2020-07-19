@@ -156,7 +156,6 @@ def getLinkSubmissions(link, size=25,display=False):
 	#ENSURES: returns list of submissions containing the link
 	#		  the submissions are dictionaries with fields such as "id", etc.
 	#		  check pushshift API for more details
-	size is an int that is <= 500
 	URL = submissionEndPoint
 	PARAMS = {"q":link, "size":size}
 	r = ratelimitedGet(url=URL, params=PARAMS)
