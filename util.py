@@ -5,6 +5,7 @@ from backoff import on_exception, expo
 from psaw import PushshiftAPI
 import csv
 import networkx as nx
+import datetime
 
 reddit = praw.Reddit(client_id="wlemUwlmzOwsDw",
 					client_secret="r2_viKFvYZ_gkvMecP-8zh8TKDA",
@@ -173,6 +174,8 @@ def getLinkSubmissions(link, size=25,display=False):
 				print(submission["author"])
 			print(submission["title"])
 			print(submission["id"])
+			epoch = submission["created_utc"]
+			print(datetime.datetime.fromtimestamp(epoch).strftime('%c'))
 	return linkSubmissions
 
 def getInteractions(redditorName): 
@@ -180,18 +183,26 @@ def getInteractions(redditorName):
 	#ENSURES: returns set of IDs of submissions they commented on, up to 500
 	interactions = set()
 	URL = commentEndPoint
-	PARAMS = {"author":redditorName, "size":500}
-	r = ratelimitedGet(url=URL, params=PARAMS)
-	try:
-		info = r.json()
-	except Exception as e:
-		print(e)
-		print("getInteractions")
-		print(r.text)
-		return interactions
-	comments = info["data"]
-	for comment in comments:
-		link_id = comment["link_id"]
-		submissionID = link_id[3:]
-		interactions.add(submissionID)
+	before = None
+	while True:
+		PARAMS = {"author":redditorName, "size":100, "before":before, 
+				  "sort":"desc", "sort_type":"created_utc"}
+		r = ratelimitedGet(url=URL, params=PARAMS)
+		try:
+			info = r.json()
+		except Exception as e:
+			print(e)
+			print("getInteractions")
+			print(r.text)
+			return interactions
+		comments = info["data"]
+		if not comments: break
+		before = comments[-1]["created_utc"]
+		for comment in comments:
+			link_id = comment["link_id"]
+			submissionID = link_id[3:]
+			interactions.add(submissionID)
+		#print("length of comments:")
+		#print(len(comments))
+		if len(comments) < 100: break
 	return interactions
