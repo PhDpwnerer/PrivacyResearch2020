@@ -184,6 +184,7 @@ def getInteractions(redditorName):
 	interactions = set()
 	URL = commentEndPoint
 	before = None
+	batch = 0
 	while True:
 		PARAMS = {"author":redditorName, "size":100, "before":before, 
 				  "sort":"desc", "sort_type":"created_utc"}
@@ -204,5 +205,7 @@ def getInteractions(redditorName):
 			interactions.add(submissionID)
 		#print("length of comments:")
 		#print(len(comments))
+		print("batch number %d" % batch)
+		batch += 1
 		if len(comments) < 100: break
 	return interactions
