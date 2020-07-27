@@ -8,10 +8,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import math
 
-G = nx.read_adjlist("graph2.adjlist")
+G = nx.read_adjlist("graph2b.adjlist")
 
 nx.draw_networkx(G, with_labels=False, node_size=10, node_color="green", alpha=0.5, )
-plt.savefig("graph2.png")
+plt.savefig("graph2b.png")
 plt.show()
 print(G.edges)
 print(len(G.nodes))

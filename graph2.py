@@ -47,7 +47,7 @@ for i in range(len(allNodes)):
 		if len(commonInteractions) > 0:
 			G.add_edge(allNodes[i], allNodes[j])
 
-nx.write_adjlist(G, "graph2.adjlist")
+nx.write_adjlist(G, "graph2b.adjlist")
 
 print("---------------------- SAVED -----------------------")
 

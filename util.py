@@ -185,7 +185,7 @@ def getInteractions(redditorName):
 	URL = commentEndPoint
 	before = None
 	batch = 0
-	while True:
+	while batch <= 49:
 		PARAMS = {"author":redditorName, "size":100, "before":before, 
 				  "sort":"desc", "sort_type":"created_utc"}
 		r = ratelimitedGet(url=URL, params=PARAMS)
