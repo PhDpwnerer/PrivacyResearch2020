@@ -7,16 +7,47 @@ import csv
 import networkx as nx
 from util import *
 
-link = "https://pages.nist.gov/800-63-3/sp800-63b.html"
+ALL = reddit.subreddit("all")
 
+randomSubmissions = [ALL.random() for i in range(500)]
 
-linkSubmissions = getLinkSubmissions(link, 500, display=True)
+# randomSubmissions = ALL.hot(limit=50)
+
+"""
+for submission in randomSubmissions:
+	print(submission.title)
+	print(submission.url)
+	print(submission.subreddit.title)
+	print(submission.id)
+"""
+
+randomSubmissionIDs = list(map(lambda x: x.id, randomSubmissions))
+print(randomSubmissionIDs)
 
 epoch_month = 2629743*3 #unix epoch
 
 interactors = set()
 times = dict()
-for submission in linkSubmissions:
+
+r = ratelimitedGet(url = submissionEndPoint, params = {"ids":randomSubmissionIDs})
+try:
+	info = r.json()
+except Exception as e:
+	print(e)
+	print("pushshiftRandomSubmissions")
+	print(r.text)
+pushshiftRandomSubmissions = info["data"] #returns list of IDs
+
+print(len(pushshiftRandomSubmissions))
+
+for submission in pushshiftRandomSubmissions:
+	#print(submission["title"])
+	#print(submission["subreddit"])
+	print(submission["full_link"])
+	print(submission["selftext"])
+	print("--------------------------------------")
+
+for submission in pushshiftRandomSubmissions:
 	start_time = submission["created_utc"] #unix epoch
 	end_time = start_time+3*epoch_month
 	subInteractors = getInteractors(submission["id"])
@@ -54,7 +85,7 @@ for i in range(len(allNodes)):
 		if len(commonInteractions) > 0:
 			G.add_edge(allNodes[i], allNodes[j])
 
-nx.write_adjlist(G, "graph2c.adjlist")
+nx.write_adjlist(G, "graph2comparison.adjlist")
 
 print("---------------------- SAVED -----------------------")
 

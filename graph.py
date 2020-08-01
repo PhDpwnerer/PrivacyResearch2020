@@ -26,13 +26,15 @@ for subreddit in allSubreddits:
 	print(count)
 	"""
 	if int(subreddit["subs"]) >= 100:
+		"""
 		subscribers = getSubscribers(subreddit["real_name"])
 		print("subscriber count:")
 		print(len(subscribers))
 		allSubscribers[subreddit["real_name"]] = subscribers
 		G.add_node(subreddit["real_name"])
+		"""
 		count += 1
-		print(count)
+		#print(count)
 print(count)
 
 allNodes = list(G.nodes())

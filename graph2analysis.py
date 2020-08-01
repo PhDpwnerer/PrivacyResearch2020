@@ -8,10 +8,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import math
 
-G = nx.read_adjlist("graph2b.adjlist")
+G = nx.read_adjlist("graph2c.adjlist")
 
-nx.draw_networkx(G, with_labels=False, node_size=10, node_color="green", alpha=0.5, )
-plt.savefig("graph2b.png")
+nx.draw_networkx(G, with_labels=False, node_size=10, node_color="green", alpha=0.5)
+plt.savefig("graph2c.png")
 plt.show()
 print(G.edges)
 print(len(G.nodes))
@@ -26,4 +26,11 @@ nx.draw(er)
 plt.savefig("Erdos_Renyi_Graph.png")
 plt.show()
 
-print(nx.diameter(G), nx.diameter(er))
+
+if nx.is_connected(G):
+	print(nx.diameter(G), nx.diameter(er))
+else:
+	print("Graph is not connected. Sum of diameter of connected components:")
+	connected_components = list(nx.connected_components(G))
+	connected_components_subgraphs = list(map(lambda x: G.subgraph(x), connected_components))
+	print(sum(list(map(lambda x: nx.diameter(x), connected_components_subgraphs))), nx.diameter(er))

@@ -6,6 +6,7 @@ from psaw import PushshiftAPI
 import csv
 import networkx as nx
 import datetime
+import random
 
 reddit = praw.Reddit(client_id="wlemUwlmzOwsDw",
 					client_secret="r2_viKFvYZ_gkvMecP-8zh8TKDA",
@@ -55,6 +56,7 @@ def getInteractors(submissionID):
 	interactors = set()
 	#print(submissionID)
 	commentIDs = getCommentIDs(submissionID)
+	print("length of commentIDs")
 	print(len(commentIDs))
 	# pushshift returns at most 500 results per call,
 	# so we must divide the list of comment ids
@@ -178,14 +180,14 @@ def getLinkSubmissions(link, size=25,display=False):
 			print(datetime.datetime.fromtimestamp(epoch).strftime('%c'))
 	return linkSubmissions
 
-def getInteractions(redditorName): 
-	#REQUIRES: username of a redditor
-	#ENSURES: returns set of IDs of submissions they commented on, up to 500
+def getInteractions(redditorName, numBatches=1): 
+	#REQUIRES: username of a redditor, int for numBatches
+	#ENSURES: returns set of IDs of submissions they commented on, up to 100*numBatches
 	interactions = set()
 	URL = commentEndPoint
 	before = None
-	batch = 0
-	while batch <= 49:
+	batch = 1
+	while batch <= numBatches:
 		PARAMS = {"author":redditorName, "size":100, "before":before, 
 				  "sort":"desc", "sort_type":"created_utc"}
 		r = ratelimitedGet(url=URL, params=PARAMS)
@@ -209,3 +211,52 @@ def getInteractions(redditorName):
 		batch += 1
 		if len(comments) < 100: break
 	return interactions
+
+def getTimedInteractions(redditorName, start_time, end_time):
+	#REQUIRES: username of a redditor, epochs for start and end times
+	#ENSURES: returns set of IDs of submissions they commented on during the
+	#		  specified time interval, up to 5000.
+	interactions = set()
+	URL = commentEndPoint
+	before = end_time
+	batch = 1
+	while batch <= 50:
+		PARAMS = {"author":redditorName, "size":100, "before":before, "after":start_time,
+				  "sort":"desc", "sort_type":"created_utc"}
+		r = ratelimitedGet(url=URL, params=PARAMS)
+		try:
+			info = r.json()
+		except Exception as e:
+			print(e)
+			print("getInteractions")
+			print(r.text)
+			return interactions
+		comments = info["data"]
+		if not comments: break
+		before = comments[-1]["created_utc"]
+		for comment in comments:
+			link_id = comment["link_id"]
+			submissionID = link_id[3:]
+			interactions.add(submissionID)
+		#print("length of comments:")
+		#print(len(comments))
+		print("batch number %d" % batch)
+		batch += 1
+		if len(comments) < 100: break
+	return interactions
+
+RANGE = 1 << 24
+def make_id(max_rand=RANGE) -> str:
+    """Make a random base36 ID"""
+    alphabet = "0123456789abcdefghijklmnopqrstuvwxyz"
+    random.seed(None)
+    # get random value
+    rand = random.randrange(1, max_rand)
+    # store base36 value
+    output = ""
+    while rand != 0:
+        rand, i = divmod(rand, len(alphabet))
+        output = alphabet[i] + output
+    # get first 6 values
+    output = output[0:6]
+    return output or '0'
