@@ -1,3 +1,11 @@
+"""
+Performs part 2 of graph1.py
+See that file for more information. 
+Requires the pickle files created by graph1.py.
+Takes around 25 min. on my computer with 16GB of ram.
+There are around 140 million edges IIRC.
+"""
+
 import praw
 import requests
 from ratelimit import limits, RateLimitException, sleep_and_retry
@@ -46,17 +54,31 @@ print("-------------------------------------------------------------------------
 print("adding nodes")
 for subreddit in allSubreddits:
 	if len(allSubscribers[subreddit]) >= 100:
-		G.add_node(subreddit)
+		G.add_node(subreddit, active=False)
+
+print(len(G.nodes))
 
 print("adding edges")
 allNodes = list(G.nodes())
+
+start_time = time.time()
+#count is to print our progress while the code is running
+count = 0
 for i in range(len(allNodes)):
 	A = allSubscribers[allNodes[i]]
 	for j in range(i+1, len(allNodes)):
 		B = allSubscribers[allNodes[j]]
 		commonSubscribers = A.intersection(B)
 		weight = len(commonSubscribers)
-		G.add_edge(allNodes[i], allNodes[j], weight=weight, active=False)
+		G.add_edge(allNodes[i], allNodes[j], weight=weight)
+		count += 1
+		if count % 1000000 == 0:			
+			current_time = time.time()
+			#prints how much time was needed to compute the latest million edges
+			print(current_time-start_time)
+			start_time = current_time
+			#prints how many million edges we have computed
+			print(count/1000000)
 
 print("Done building graph")
 

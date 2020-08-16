@@ -1,3 +1,10 @@
+"""
+graph2control.py serves as a control group for graph2.
+graph2control builds the same graph as graph2, but using a different link.
+See graph2.py's comments to better understand how code works.
+links are pulled from either poplinks or links (your choice).
+"""
+
 import praw
 import requests
 from ratelimit import limits, RateLimitException, sleep_and_retry
@@ -7,49 +14,34 @@ import csv
 import networkx as nx
 from util import *
 
-ALL = reddit.subreddit("all")
+import pprint
+import json
 
-randomSubmissions = [ALL.random() for i in range(500)]
+#poplinks.json is created by generatePopLinks.py
+#links.json is created by generateLinks.py
+with open('poplinks.json', 'r') as fp:
+    links = json.load(fp)
 
-# randomSubmissions = ALL.hot(limit=50)
+pprint.pprint(links)
 
-"""
-for submission in randomSubmissions:
-	print(submission.title)
-	print(submission.url)
-	print(submission.subreddit.title)
-	print(submission.id)
-"""
+#List of links for previously built control graphs
+# control1: http://www.ncbi.nlm.nih.gov/pubmed/17378847
+# control2: http://xkcd.com/137/
+# control3: https://www.ally.com/do-it-right/investing/top-10-option-trading-mistakes/
 
-randomSubmissionIDs = list(map(lambda x: x.id, randomSubmissions))
-print(randomSubmissionIDs)
+link = "https://www.ally.com/do-it-right/investing/top-10-option-trading-mistakes/"
 
-epoch_month = 2629743*3 #unix epoch
+
+linkSubmissions = getLinkSubmissions(link, 100, display=True)
+print(len(linkSubmissions)) #to make sure it is less than 100
+
+epoch_month = 2629743 #unix epoch value for one month
 
 interactors = set()
 times = dict()
-
-r = ratelimitedGet(url = submissionEndPoint, params = {"ids":randomSubmissionIDs})
-try:
-	info = r.json()
-except Exception as e:
-	print(e)
-	print("pushshiftRandomSubmissions")
-	print(r.text)
-pushshiftRandomSubmissions = info["data"] #returns list of IDs
-
-print(len(pushshiftRandomSubmissions))
-
-for submission in pushshiftRandomSubmissions:
-	#print(submission["title"])
-	#print(submission["subreddit"])
-	print(submission["full_link"])
-	print(submission["selftext"])
-	print("--------------------------------------")
-
-for submission in pushshiftRandomSubmissions:
+for submission in linkSubmissions:
 	start_time = submission["created_utc"] #unix epoch
-	end_time = start_time+3*epoch_month
+	end_time = start_time+6*epoch_month
 	subInteractors = getInteractors(submission["id"])
 	for user in subInteractors:
 		times[user] = (start_time,end_time)
@@ -85,13 +77,10 @@ for i in range(len(allNodes)):
 		if len(commonInteractions) > 0:
 			G.add_edge(allNodes[i], allNodes[j])
 
-nx.write_adjlist(G, "graph2comparison.adjlist")
+nx.write_adjlist(G, "control3.adjlist")
 
 print("---------------------- SAVED -----------------------")
 
 
 
 #print(G.edges)
-
-
-nx.draw_networkx(G)
