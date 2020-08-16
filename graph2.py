@@ -48,7 +48,8 @@ G = nx.Graph()
 #allInteractions is a dict where each key is the name of an interactor
 #if using getTimedInteractions(), then each value is a set of ids of submissions
 #they commented on during that 6 month window (start_time, end_time)
-#if using getInteractions (see util.py) then we are only looking at the latest
+#if using getInteractions (see util.py, only look at the latest x amount of comments) 
+#then we are only looking at the latest
 #submissions they commented on
 allInteractions = dict()
 
