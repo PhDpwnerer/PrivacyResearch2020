@@ -1,0 +1,28 @@
+-------------------------------
+Topics using bestTopicModelNMF:
+-------------------------------
+Topic 0:
+like dont im think people time good thats really know youre way make ive want right got going did lot
+Topic 1:
+don ve ll didn doesn isn like lol know won really make think love got sounds time feel yeah kid
+Topic 2:
+server use users user windows domain network data access using need install company microsoft ad email set app security software
+Topic 3:
+game blizzard leveling level players play new loot gear wow content dps legion player raid quest people quests races games
+Topic 4:
+people police cops black white fuck racist trump racism person fucking america shit saying vote law government public country money
+Topic 5:
+password passwords manager dictionary characters words using word secure sites thanks use length security account accounts users random character remember
+Topic 6:
+gt theres god doesnt evidence point answer policy source does business credit card states require loot correct legal write remember
+Topic 7:
+slots authenticator sms bag protect remove phone security blizzard account app replace extra items know level like lol moved ive
+-------------------------------
+Topics using bestTopicModelLDA:
+-------------------------------
+Topic 0:
+like people dont im time think really know good make way thats want game youre need going did got right
+Topic 1:
+like dont people use gt password think time make need youre good im want way thats know work going really
+Topic 2:
+que la en el es si se por et le van lo te los die like dont people plus im
