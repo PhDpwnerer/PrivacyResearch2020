@@ -12,7 +12,7 @@
 6. graph1analysis.py: Performs louvain method of community detection on graph 1 and identifies which communities contained posts of our security link.
 7. graph2.py: creates graph #2 (see SURF proposal) where each node is a user that interacted with out link and edge connects users who commented on same submission at some point in time.
 8. graph2control.py: serves as control group to compare graph2 to (graph generated via random link). Obsolete if we use erdos-renyi graph instead.
-9. graph2analysis.py: calculates diameter of graph2 and compares it to diameters of 20 erdos-renyi graphs that have same edge density.
+9. graph2analysis.py: calculates diameter of graph2 and compares it to diameters of 20 erdos-renyi graphs that have same edge density. Can also be used to analyse control graphs.
 10. generateLinks.py: saves as .json file a dictionary of randomly generated links.
 11. generatePopLinks.py: saves as .json file a dictionary of randomly generated popular links.
 
