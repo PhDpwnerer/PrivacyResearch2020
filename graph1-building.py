@@ -53,7 +53,7 @@ print("-------------------------------------------------------------------------
 
 print("adding nodes")
 for subreddit in allSubreddits:
-	if len(allSubscribers[subreddit]) >= 100:
+	if len(allSubscribers[subreddit]) >= 1000:
 		G.add_node(subreddit, active=False)
 
 print(len(G.nodes))
@@ -82,6 +82,6 @@ for i in range(len(allNodes)):
 
 print("Done building graph")
 
-nx.write_adjlist(G, "graph1.adjlist")
+nx.write_adjlist(G, "graph1b.adjlist")
 
 print("---------------------- SAVED -----------------------")

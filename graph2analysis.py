@@ -4,6 +4,9 @@ We compare the diameter of graph2 with the diameter of 20 random graphs.
 The random graphs are erdos-renyi graphs where p=edge density of graph2
 If a graph is not connected, we calculate the diameter by summing the
 diameters of each connected component.
+
+This file can also be used to analyze the control graphs. Just make sure
+that you adjust which graph is being loaded.
 """
 
 import praw
