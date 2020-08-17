@@ -36,7 +36,7 @@ We modeled Reddit on a subreddit level. Each node is a subreddit, and edge weigh
 
 For the sake of run-time efficiency, we downloaded all the comments from April 2019 and iterated through them locally.
 
-We then performed Louvain method of community detection to see which communities contained the **link posts**. **UNFORTUNATELY, THE MODULE FOR THE LOUVAIN METHOD OF COMMUNITY DETECTION IS BUGGY AND I GET SEGFAULTS.**
+We then performed Louvain method of community detection to see which communities contained the **link posts**. **UNFORTUNATELY, THE MODULE FOR THE LOUVAIN METHOD OF COMMUNITY DETECTION IS BUGGY AND I GET SEGFAULTS. ONLY HAPPENS WHEN THE GRAPH IS TOO BIG.**
 
 See the following files: graph1.py, graph1-building.py, graph1analysis.py
 
